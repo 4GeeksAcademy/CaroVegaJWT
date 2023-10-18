@@ -4,9 +4,11 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
+from flask_bcrypt import Bcrypt
 
 api = Blueprint('api', __name__)
-
+app = Flask(__name__)
+bcrypt = Bcrypt(app)
 
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
@@ -16,3 +18,56 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
+@api.route('/user', methods=['GET'])
+def get_users():
+    all_users = User.query.all()
+    results = list(map(lambda item: item.serialize(),all_users))
+    return jsonify(results), 200
+    
+@api.route('/signup', methods=['POST'])
+def record_user():
+    email_user = request.json.get("email")
+    password_user = request.json.get("password")
+    secure_password = bcrypt.generate_password_hash(password_user,10).decode("utf-8")
+    userexist = User.query.filter_by(email=email_user).first()
+    if userexist:
+        return jsonify({"msg":"el email de usuario ya se encuentra registrado"})
+        
+    new_user = User(  email=email_user,
+    password=password_user,
+    is_active=True)
+
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({"msg":"Su registro se realizo satisfactoriamente"}), 201
+    
+@api.route('/login', methods=['POST'])
+def login_user():
+    data_user = request.json 
+    userexist = User.query.filter_by(email=data_user['email']).first()
+    if userexist:
+        return jsonify({"msg":"el email de usuario ya se encuentra registrado"})
+        
+    new_user = User(  email=data_user['email'],
+    password=data_user['password'],
+    is_active=True)
+
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({"msg":"Su registro se realizo satisfactoriamente"}), 201
+    
+@api.route('/user/private', methods=['GET'])
+def data_user():
+    data_user = request.json 
+    userexist = User.query.filter_by(email=data_user['email']).first()
+    if userexist:
+        return jsonify({"msg":"el email de usuario ya se encuentra registrado"})
+        
+    new_user = User(  email=data_user['email'],
+    password=data_user['password'],
+    is_active=True)
+
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({"msg":"Su registro se realizo satisfactoriamente"}), 201
