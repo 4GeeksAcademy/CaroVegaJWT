@@ -16,6 +16,11 @@ export const Signup = props => {
 			<div className="col-md-7 mx-auto">
 				<Formsignup/>
 			</div>
+			<div className="text-center">
+				<Link to="/">
+					<span>I'm already registered</span>
+				</Link>
+			</div>
 		</div>
 	);
 };

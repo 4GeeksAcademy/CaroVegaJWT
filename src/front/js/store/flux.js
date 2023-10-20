@@ -17,6 +17,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 		session:false
 		},
 		actions: {
+			userRegister: (data_user) =>{
+				console.log("desdeflux")
+				console.log(data_user)
+			},
+			login:(data) =>{
+				console.log("login desde flux")
+				console.log(data)
+			},
+
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");

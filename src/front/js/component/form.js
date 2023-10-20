@@ -1,20 +1,39 @@
-import React from "react";
-
+import React, { useState, useEffect, useContext } from "react";
+import { Context } from "../store/appContext";
 
 
 export const Form = () => {
+    
+    const { store, actions } = useContext(Context);
+
+    function submitForm(e){
+		e.preventDefault()
+        console.log ("send")
+		const formData = new FormData(e.target);
+        const datauser={};
+
+        for(const entrada of formData.entries()){
+			console.log(entrada)
+			datauser[entrada[0]]=entrada[1];	
+		};
+        
+		actions.login(datauser)		
+		
+	}
+
 	return (
-		<form>
+		<form onSubmit={submitForm}>
             <div className="form-group m-2">
-                <label htmlFor="exampleInputEmail1">Email address</label>
-                <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"/>
+                <label htmlFor="email">Email address</label>
+                <input type="email" className="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email"/>
             </div>
             <div className="form-group m-2">
-                <label htmlFor="exampleInputPassword1">Password</label>
-                <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password"/>
+                <label htmlFor="password">Password</label>
+                <input type="password" className="form-control" id="password" name = "password" placeholder="Password"/>
             </div>
-           
-            <button type="submit" className="btn btn-primary m-3">Submit</button>
+            <div className="d-flex justify-content-center">
+            <button type="submit" className="btn btn-primary m-3">Send</button>
+            </div>
         </form>
 	);
 };

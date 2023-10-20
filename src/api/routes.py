@@ -33,6 +33,10 @@ def record_user():
     print(email_user)
     password_user = request.json.get("password")
     print(password_user)
+    birthdate_user = request.json.get("birthdate")
+    print(birthdate_user)
+    hobbies_user = request.json.get("hobbies")
+
     secure_password = bcrypt.generate_password_hash(password_user,10).decode("utf-8")
     print(secure_password)
     userexist = User.query.filter_by(email=email_user).first()
@@ -42,6 +46,8 @@ def record_user():
         
     new_user = User(  email=email_user,
     password=secure_password,
+    birthdate = birthdate_user,
+    hobbies = hobbies_user,
     is_active=True)
 
     db.session.add(new_user)

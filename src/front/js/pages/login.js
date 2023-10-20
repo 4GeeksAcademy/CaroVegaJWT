@@ -9,15 +9,19 @@ export const Login = () => {
 	const { store, actions } = useContext(Context);
 
 	return (
-		<div className="text-center mt-5">
-			<h1 className = "m-3">LOGIN</h1>
+		<div>
+			<div className="text-center mt-5">
+				<h1 className = "m-3">LOGIN</h1>
+			</div>
 			<div className = "col-md-7 mx-auto" >
 				<Form/>
 
 			</div>
-			<Link to="/signup">
-				<span>Do you want to register</span>
-			</Link>
+			<div className="text-center">
+				<Link to="/signup">
+					<span>Do you want to register</span>
+				</Link>
+			</div>
 		</div>
 	);
 };
