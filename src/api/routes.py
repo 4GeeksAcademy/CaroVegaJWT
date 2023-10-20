@@ -5,6 +5,8 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import create_access_token, jwt_required, JWTManager,  get_jwt_identity
+
 
 api = Blueprint('api', __name__)
 app = Flask(__name__)
@@ -28,14 +30,18 @@ def get_users():
 @api.route('/signup', methods=['POST'])
 def record_user():
     email_user = request.json.get("email")
+    print(email_user)
     password_user = request.json.get("password")
+    print(password_user)
     secure_password = bcrypt.generate_password_hash(password_user,10).decode("utf-8")
+    print(secure_password)
     userexist = User.query.filter_by(email=email_user).first()
+    
     if userexist:
         return jsonify({"msg":"el email de usuario ya se encuentra registrado"})
         
     new_user = User(  email=email_user,
-    password=password_user,
+    password=secure_password,
     is_active=True)
 
     db.session.add(new_user)
@@ -44,23 +50,42 @@ def record_user():
     
 @api.route('/login', methods=['POST'])
 def login_user():
-    data_user = request.json 
-    userexist = User.query.filter_by(email=data_user['email']).first()
-    if userexist:
-        return jsonify({"msg":"el email de usuario ya se encuentra registrado"})
-        
-    new_user = User(  email=data_user['email'],
-    password=data_user['password'],
-    is_active=True)
-
-    db.session.add(new_user)
-    db.session.commit()
-    return jsonify({"msg":"Su registro se realizo satisfactoriamente"}), 201
+    email_user = request.json.get("email")
     
-@api.route('/user/private', methods=['GET'])
-def data_user():
+    password_user = request.json.get("password")
+    
+
+    userexist = User.query.filter_by(email=email_user).first()
+    print (type(userexist))
+    if not userexist:
+        return jsonify({"msg":"usuario no registrado"}), 401
+    
+    if not bcrypt.check_password_hash(userexist.password, password_user):
+         return jsonify({"msg":"la contraseña no es correcta"}), 401
+    
+    token=create_access_token(identity=userexist.id)
+    return jsonify({"msg":"su usuario y contraseña son correctos", "token":token}), 201
+    
+# Protect a route with jwt_required, which will kick out requests
+# without a valid JWT present.
+@api.route("/profile", methods=["GET"])
+@jwt_required()
+def profile():
+    # Access the identity of the current user with get_jwt_identity
+    id_user = get_jwt_identity()
+    datauser=User.query.filter_by(id=id_user).first()
+    response_body = {
+        "msg": "usuario encontrado", "user":datauser.serialize()
+    }
+    return jsonify(response_body), 200
+
+
+@api.route('/logout', methods=['POST'])
+@jwt_required()
+def logout_user():
     data_user = request.json 
     userexist = User.query.filter_by(email=data_user['email']).first()
+    
     if userexist:
         return jsonify({"msg":"el email de usuario ya se encuentra registrado"})
         
