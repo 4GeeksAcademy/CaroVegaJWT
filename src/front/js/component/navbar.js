@@ -13,7 +13,7 @@ export const Navbar = () => {
 					{store.session === true ?
 					<>
 						<Link to="/">
-						<button className="btn btn-danger">Log Out </button>
+						<button className="btn btn-danger" onClick={()=>{actions.logout()}}>Log Out </button>
 						</Link>
 					</>
 					:<span></span>

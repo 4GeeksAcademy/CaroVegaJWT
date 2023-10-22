@@ -24,7 +24,7 @@ def handle_hello():
 @api.route('/user', methods=['GET'])
 def get_users():
     all_users = User.query.all()
-    results = list(map(lambda item: item.serialize(),all_users))
+    results = list(map(lambda item: item.email,all_users))
     return jsonify(results), 200
     
 @api.route('/signup', methods=['POST'])
@@ -86,19 +86,3 @@ def profile():
     return jsonify(response_body), 200
 
 
-@api.route('/logout', methods=['POST'])
-@jwt_required()
-def logout_user():
-    data_user = request.json 
-    userexist = User.query.filter_by(email=data_user['email']).first()
-    
-    if userexist:
-        return jsonify({"msg":"el email de usuario ya se encuentra registrado"})
-        
-    new_user = User(  email=data_user['email'],
-    password=data_user['password'],
-    is_active=True)
-
-    db.session.add(new_user)
-    db.session.commit()
-    return jsonify({"msg":"Su registro se realizo satisfactoriamente"}), 201

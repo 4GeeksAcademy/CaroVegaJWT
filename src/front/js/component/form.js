@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext";
-
+import { useNavigate } from "react-router-dom";
 
 export const Form = () => {
     
     const { store, actions } = useContext(Context);
+    const navigate = useNavigate();
 
-    function submitForm(e){
+     async function submitForm(e){
 		e.preventDefault()
         console.log ("send")
 		const formData = new FormData(e.target);
@@ -16,10 +17,18 @@ export const Form = () => {
 			console.log(entrada)
 			datauser[entrada[0]]=entrada[1];	
 		};
-        
-		actions.login(datauser)		
-		
-	}
+
+        actions.login(datauser);
+       
+        try {
+            const responsestatus = await actions.login(datauser);
+            if(responsestatus === 201){
+                navigate("/profile")
+            }
+        } catch (error) {
+            console.error("Error al enviar el formulario", error);
+        }
+    }
 
 	return (
 		<form onSubmit={submitForm}>

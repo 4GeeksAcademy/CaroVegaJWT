@@ -6,36 +6,21 @@ import { Context } from "../store/appContext";
 export const Profile = () => {
 	const { store, actions } = useContext(Context);
 
+	const formatBirthdate = (birthdate) => {
+        const date = new Date(birthdate);
+        const day = date.getDate();
+        const month = date.getMonth() + 1; // El mes es de 0 a 11, sumamos 1 para obtener el mes correcto
+        const year = date.getFullYear();
+
+        // Formateamos la fecha como "dd/mm/yyyy"
+        return `${day}/${month}/${year}`;
+    };
+	
 	return (
 		<div className="container">
-			<ul className="list-group">
-				{store.demo.map((item, index) => {
-					return (
-						<li
-							key={index}
-							className="list-group-item d-flex justify-content-between"
-							style={{ background: item.background }}>
-							<Link to={"/single/" + index}>
-								<span>Link to: {item.title}</span>
-							</Link>
-							{// Conditional render example
-							// Check to see if the background is orange, if so, display the message
-							item.background === "orange" ? (
-								<p style={{ color: item.initial }}>
-									Check store/flux.js scroll to the actions to see the code
-								</p>
-							) : null}
-							<button className="btn btn-success" onClick={() => actions.changeColor(index, "orange")}>
-								Change Color
-							</button>
-						</li>
-					);
-				})}
-			</ul>
-			<br />
-			<Link to="/">
-				<button className="btn btn-primary">Back home</button>
-			</Link>
+			<h1>{store.user.email}</h1>
+			<h1>{formatBirthdate(store.user.birthdate)}</h1>
+				
 		</div>
 	);
 };
