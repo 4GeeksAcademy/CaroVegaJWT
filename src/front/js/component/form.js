@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
+import { ModalLoginError } from "./modalloginerror";
 
 export const Form = () => {
-    
+    const [error, setError]=useState("")
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
 
@@ -17,17 +18,16 @@ export const Form = () => {
 			console.log(entrada)
 			datauser[entrada[0]]=entrada[1];	
 		};
-
-        actions.login(datauser);
-       
-        try {
-            const responsestatus = await actions.login(datauser);
-            if(responsestatus === 201){
+      
+        const response = await actions.login(datauser);
+            if(response ==="autorizado"){
                 navigate("/profile")
+            }else{
+                console.log ("error desde front " + response.msg);
+                setError(response.msg);
+                actions.openErrorlogin();
             }
-        } catch (error) {
-            console.error("Error al enviar el formulario", error);
-        }
+       
     }
 
 	return (
@@ -42,6 +42,7 @@ export const Form = () => {
             </div>
             <div className="d-flex justify-content-center">
             <button type="submit" className="btn btn-primary m-3">Send</button>
+            <ModalLoginError error={error}/>
             </div>
         </form>
 	);

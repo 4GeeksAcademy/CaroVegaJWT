@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext";
 import { ModalRegSucces} from "./modalregsucces";
 import { ModalUserExist } from "./modaluserexist";
+import {ModalRegincomp} from "./modalregincomp";
 import { Link } from "react-router-dom";
 
 
@@ -20,14 +21,18 @@ export const Formsignup = () => {
 					
 		};
         if(datasignup.email === ""|| datasignup.password === "" || datasignup.birthdate===''|| datasignup.hobbies===''){
-            console.log("registros incompleto")
+            actions.openModalRC();
         } else{
             console.log(datasignup);
-            const userexist = await actions.userexist()
+            const userexist = await actions.userexist(datasignup.email)
             if (userexist){
                 actions.openModalUE();
             }else{
+                const resp = await actions.userRegister(datasignup);
+                console.log(resp)
+                if(resp){
                 actions.openModalr();
+                }
             }
     }
     }
@@ -55,9 +60,9 @@ export const Formsignup = () => {
                 <div className="d-flex justify-content-center">
                     
                         <button type="submit" className="btn btn-primary m-3" >Send</button>
-                         <ModalUserExist/>
-                         <ModalRegSucces/>
-                        
+                            <ModalUserExist/>
+                            <ModalRegSucces/>
+                            <ModalRegincomp/>
                 </div>
             </form>
             

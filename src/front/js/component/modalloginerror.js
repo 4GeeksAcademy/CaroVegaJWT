@@ -3,25 +3,25 @@ import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 import "../../styles/home.css";
 
-export const ModalRegincomp = ( ) => {
+export const ModalLoginError = ( prop) => {
     const { store, actions } = useContext(Context);
 return (
-        <div className= "modal" tabIndex={1} role="dialog" style={{display:store.opeRComprob}}>
+        <div className= "modal" tabIndex={1} role="dialog" style={{display:store.openError}}>
         <div className="modal-dialog" role="document">
             <div className="modal-content">
             <div className="modal-header">
-                <h5 className="modal-title">Registered User</h5>
-                    <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={()=>actions.closeModalRC()} >
+                <h5 className="modal-title">Login User</h5>
+                    <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={()=>actions.closeErrorlogin()} >
                     <span aria-hidden="true">&times;</span>
                     </button>
                 
             </div>
             <div className="modal-body">
-                <p>Please fill out the form completely.</p>
+                <p>{prop.error}</p>
             </div>
             <div className="modal-footer">
             
-                <button type="button" className="btn btn-secondary" data-dismiss="modal"  onClick={()=>actions.closeModalRC()}>Close</button>
+                <button type="button" className="btn btn-secondary" data-dismiss="modal"  onClick={()=>actions.closeErrorlogin()}>Close</button>
             
             </div>
             </div>

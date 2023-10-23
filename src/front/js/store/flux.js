@@ -17,7 +17,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 		session:false,
 		user:{},
 		openMregister: "none",
-		openMuserexist:"none"
+		openMuserexist:"none",
+		opeRComprob:"none",
+		openError:"none"
 		},
 		actions: {
 			userexist:async(emailUser) =>{
@@ -52,8 +54,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					if (resp.ok) {
 						console.log ("realizado");
-						const {openModalr}= getActions();
-						openModalr();
+						if (resp.status ===201){
+							return true;
+						}else{
+							return false;
+						}
+						
 						
 					} else {
 						console.error("Error al obtener datos de la API. Respuesta completa:", await resp.text());
@@ -76,25 +82,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 					
 						const dataresp = await resp.json();
 						if(resp.status === 201){
-							setStore({ session: true });
-							}
-
-						const token =dataresp.token;
+							const token =dataresp.token;
 						
-						localStorage.setItem("token",token);
-						const {userdataprofile}=getActions();
-						userdataprofile(token);
-						
-						return  resp.status;	
-						
+							localStorage.setItem("token",token);
+							const {userdataprofile}=getActions();
+							userdataprofile(token);
+							setStore({ session:true });
+							return "autorizado";
+						}
 					} else {
-						console.error("Error al obtener datos de la API. Respuesta completa:", await resp.text());
-						return  resp.status;
+						const resperror =  await resp.json();
+						console.error("Error al obtener datos de la API. Respuesta completa:",resperror);
+						 return resperror
 					}
 					
 				}catch (error){
 					console.error({error})
-					return
+					
 				}
 			},userdataprofile:async(tuTokenJWT) =>{
 				try{
@@ -137,14 +141,27 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			openModalUE:()=>{
 				console.log ("desdeflux modal usuario existente")
-				//setStore({openMuserexist: "flex"})
+				setStore({openMuserexist: "flex"})
 			},
 			closeModalUE:()=>{
 				setStore({openMuserexist:"none"});
+			},
+			openModalRC:()=>{
+				console.log ("desdeflux modal usuario existente")
+				setStore({opeRComprob: "flex"})
+			},
+			closeModalRC:()=>{
+				setStore({opeRComprob:"none"});
+			},
+			openErrorlogin:()=>{
+				console.log ("desdeflux modal error login")
+				setStore({openError: "flex"});
+			},
+			closeErrorlogin:()=>{
+				setStore({openError:"none"});
 			}
-			
-		}
-	};
+	}
 };
+}
 
 export default getState;

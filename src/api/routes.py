@@ -64,10 +64,10 @@ def login_user():
     userexist = User.query.filter_by(email=email_user).first()
     print (type(userexist))
     if not userexist:
-        return jsonify({"msg":"usuario no registrado"}), 401
+        return jsonify({"msg":"Unregistered user"}), 401
     
     if not bcrypt.check_password_hash(userexist.password, password_user):
-         return jsonify({"msg":"la contraseña no es correcta"}), 401
+         return jsonify({"msg":"The password is not correct"}), 401
     
     token=create_access_token(identity=userexist.id)
     return jsonify({"msg":"su usuario y contraseña son correctos", "token":token}), 201

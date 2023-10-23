@@ -11,7 +11,7 @@ return (
             <div className="modal-content">
             <div className="modal-header">
                 <h5 className="modal-title">Registered User</h5>
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={()=>actions.closeModalUE()}>
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -19,7 +19,7 @@ return (
                 <p>Your registration was rejected. This email already exists.</p>
             </div>
             <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={()=>actions.closeModalUE()}>Close</button>
             </div>
             </div>
         </div>
