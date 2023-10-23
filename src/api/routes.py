@@ -74,9 +74,9 @@ def login_user():
     
 # Protect a route with jwt_required, which will kick out requests
 # without a valid JWT present.
-@api.route("/profile", methods=["GET"])
+@api.route("/private", methods=["GET"])
 @jwt_required()
-def profile():
+def private():
     # Access the identity of the current user with get_jwt_identity
     id_user = get_jwt_identity()
     datauser=User.query.filter_by(id=id_user).first()

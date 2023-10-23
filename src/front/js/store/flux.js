@@ -102,12 +102,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},userdataprofile:async(tuTokenJWT) =>{
 				try{
-					const resp = await fetch('https://literate-space-spork-66997qq6qvfrjq5-3001.app.github.dev/api/profile', {
+					const resp = await fetch('https://literate-space-spork-66997qq6qvfrjq5-3001.app.github.dev/api/private', {
 						method:"GET",
 						headers:{'Authorization': 'Bearer ' + tuTokenJWT}
 					});
 					if (resp.ok) {
-						console.log ("desde los datos del token userdata profile");
+						console.log ("desde los datos del token userdata private");
 					
 						const datauser = await resp.json();
 						const user =datauser.user;

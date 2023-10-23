@@ -21,7 +21,7 @@ export const Form = () => {
       
         const response = await actions.login(datauser);
             if(response ==="autorizado"){
-                navigate("/profile")
+                navigate("/private")
             }else{
                 console.log ("error desde front " + response.msg);
                 setError(response.msg);

@@ -20,6 +20,7 @@ export const Profile = () => {
 		<div className="container">
 			<h1>{store.user.email}</h1>
 			<h1>{formatBirthdate(store.user.birthdate)}</h1>
+			<h1>{store.user.hobbies}</h1>
 				
 		</div>
 	);
